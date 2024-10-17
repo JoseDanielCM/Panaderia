@@ -96,7 +96,7 @@ CREATE TABLE productoIngrediente     (
     porcentaje int,
     foreign key (id_producto) references producto(id),
     foreign key (id_ingrediente) references ingrediente(id)
-);
+); --
 
 CREATE TABLE log (
     id int primary key AUTO_INCREMENT,
