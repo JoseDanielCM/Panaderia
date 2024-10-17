@@ -55,3 +55,14 @@ CREATE TABLE ordenesCompra (
     fecha datetime,
     foreign key (id_proveedor) references proveedor(id)
 );
+
+CREATE TABLE ordenProducto (
+    id int primary key AUTO_INCREMENT,
+    id_orden int,
+    id_producto int,
+    cantidad int,
+    subtotal float,
+    foreign key (id_orden) references ordenesCompra(id),
+    foreign key (id_producto) references producto(id)
+
+);
