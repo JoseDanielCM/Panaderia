@@ -19,6 +19,7 @@ CREATE TABLE venta (
     id int primary key AUTO_INCREMENT,
     fecha date,
     total float,
+    estado enum("pendiente","completada"),	
     id_cliente int,
     id_empleado int,
     foreign key (id_cliente) references cliente(id),
@@ -35,6 +36,7 @@ CREATE TABLE producto (
     id_categoria int,
     nombre varchar(100),
     precio float,
+    stock int,
     id_ingrediente_principal int,
     foreign key (id_categoria) references categoria(id)
 ); -- 

@@ -5,7 +5,7 @@ VALUES
 ('Pedro Rojas', '3112345678', '1992-11-05'),
 ('Lucía Martínez', '3156789012', '1987-03-12'),
 ('Sofía Fernández', '3198765432', '1995-07-30'),
-('Carlos Suárez', '3120987654', '1980-04-25'),
+('Carlos Suárez', '3120987654', '1980-04-25'),	
 ('Laura Torres', '3109876543', '1993-12-18'),
 ('Ana Herrera', '3134567890', '1988-01-10'),
 ('Diego Vargas', '3167890123', '1991-06-20'),
@@ -47,18 +47,18 @@ VALUES
 ('Galletas'),
 ('Empanadas');
 
-INSERT INTO producto (id_categoria, nombre, precio, id_ingrediente_principal) 
+INSERT INTO producto (id_categoria, nombre, precio, stock,id_ingrediente_principal) 
 VALUES 
-(1, 'Pan Integral', 1.50, 1), 
-(1, 'Pan Blanco', 1.00, 1), 
-(2, 'Pastel de Chocolate', 2.50, 4), 
-(2, 'Galletas de Vainilla', 1.75, 8),
-(3, 'Café Americano', 1.25, 7), 
-(3, 'Café con Leche', 1.50, 3), 
-(4, 'Torta de Tres Leches', 3.00, 3),
-(5, 'Dulce de Leche', 2.00, 2),
-(6, 'Galleta de Avena', 1.80, 1),
-(7, 'Empanada de Pollo', 2.20, 1);
+(1, 'Pan Integral', 1.50,10, 1), 
+(1, 'Pan Blanco', 1.00,2, 1), 
+(2, 'Pastel de Chocolate', 2.50,0, 4), 
+(2, 'Galletas de Vainilla', 1.75,1, 8),
+(3, 'Café Americano', 1.25,1, 7), 
+(3, 'Café con Leche', 1.50,9, 3), 
+(4, 'Torta de Tres Leches', 3.00,3, 3),
+(5, 'Dulce de Leche', 2.00,8, 2),
+(6, 'Galleta de Avena', 1.80,10, 1),
+(7, 'Empanada de Pollo', 2.20,12, 1);
 
 INSERT INTO productoIngrediente (id_producto, id_ingrediente, porcentaje) 
 VALUES 
@@ -92,18 +92,18 @@ VALUES
 ('Proveedor I'),
 ('Proveedor J');
 
-INSERT INTO venta (fecha, id_cliente, id_empleado,total) 
+INSERT INTO venta (fecha, id_cliente, id_empleado,total,estado) 
 VALUES 
-('2024-10-15', 1, 1,null),
-('2024-10-16', 2, 2,null),
-('2024-10-17', 3, 3,null),
-('2024-10-18', 4, 4,null),
-('2024-10-19', 5, 5,null),
-('2024-10-20', 6, 6,null),
-('2024-10-21', 7, 7,null),
-('2024-10-22', 8, 8,null),
-('2024-10-23', 9, 9,null),
-('2024-10-24', 10, 10,null);
+('2024-10-15', 1, 1,null,"completada"),
+('2024-10-16', 2, 2,null,"completada"),
+('2024-10-17', 3, 3,null,"completada"),
+('2024-10-18', 4, 4,null,"completada"),
+('2024-10-19', 5, 5,null,"completada"),
+('2024-10-20', 6, 6,null,"completada"),
+('2024-10-21', 7, 7,null,"completada"),
+('2024-10-22', 8, 8,null,"pendiente"),
+('2024-10-23', 9, 9,null,"completada"),
+('2024-10-24', 10, 10,null,"pendiente");
 
 INSERT INTO productosVenta(id_venta,id_producto,cantidad,subtotal) VALUES 
 (1,1,2,null),
@@ -121,6 +121,7 @@ INSERT INTO productosVenta(id_venta,id_producto,cantidad,subtotal) VALUES
 (9,1,1,null),
 (10,1,3,null)
 ;
+
 
 
 INSERT INTO ordenesCompra (id_proveedor, total, fecha) 

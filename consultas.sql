@@ -22,7 +22,7 @@ select * from empleado;
 
 -- Mostrar todas las órdenes de compra a proveedores.
 
-select * from ordenescompra;
+select * from ordenesCompra;
 
 -- Listar todas las ventas superiores a $5.
 
@@ -39,18 +39,18 @@ select * from proveedor;
 
 -- Mostrar las órdenes de compra que están pendientes.
 
-select * from ordenescompra where ordenescompra.fecha > curdate();
+select * from ordenesCompra where ordenesCompra.fecha > curdate();
 
 -- 2 Consultas con JOIN
 
 -- Obtener todas las ventas con el detalle de los productos vendidos
-select venta.*, productosventa.cantidad, productosventa.subtotal from venta JOIN productosventa 
-on productosventa.id_venta = venta.id;
+select venta.*, productosVenta.cantidad, productosVenta.subtotal from venta JOIN productosVenta 
+on productosVenta.id_venta = venta.id;
 -- Mostrar los ingredientes utilizados en cada producto
 
 select producto.nombre, GROUP_CONCAT(ingrediente.nombre SEPARATOR ", ") as ingredientes from producto
-join productoingrediente on productoingrediente.id_producto = producto.id
-join ingrediente on ingrediente.id = productoingrediente.id_ingrediente
+join productoIngrediente on productoIngrediente.id_producto = producto.id
+join ingrediente on ingrediente.id = productoIngrediente.id_ingrediente
 GROUP BY producto.id;
 
 -- Mostrar las ventas de cada empleado.
@@ -64,9 +64,9 @@ GROUP BY empleado.id;
 
 select proveedor.nombre, GROUP_CONCAT(producto.nombre SEPARATOR ", ") as productosCompramos
 from proveedor
-join ordenescompra on ordenescompra.id_proveedor = proveedor.id
-join ordenproducto on ordenproducto.id_orden = ordenescompra.id
-join producto on producto.id = ordenproducto.id_producto
+join ordenesCompra on ordenesCompra.id_proveedor = proveedor.id
+join ordenProducto on ordenProducto.id_orden = ordenesCompra.id
+join producto on producto.id = ordenProducto.id_producto
 GROUP BY proveedor.id;
 
 -- Mostrar los clientes y sus respectivas compras.
@@ -74,11 +74,75 @@ GROUP BY proveedor.id;
 select cliente.nombre, GROUP_CONCAT(producto.nombre SEPARATOR ", ") as productosComprdos
 from cliente
 join venta on venta.id_cliente = cliente.id
-join productosventa on productosventa.id_venta = venta.id
-join producto on producto.id = productosventa.id_producto
+join productosVenta on productosVenta.id_venta = venta.id
+join producto on producto.id = productosVenta.id_producto
 GROUP BY cliente.id;
 -- Obtener las órdenes de compra junto con los proveedores correspondientes.
+
+select ordenesCompra.*, proveedor.nombre from proveedor 
+join ordenesCompra on ordenesCompra.id_proveedor = proveedor.id;
+
 -- Mostrar el inventario actual de productos junto con el proveedor del ingrediente principal.
+
+select producto.nombre, ingrediente.nombre as ingredientePrincipal,  proveedor.nombre 
+from producto
+join productoIngrediente on productoIngrediente.id_producto = producto.id
+join ingrediente on ingrediente.id = productoIngrediente.id_ingrediente
+join ordenIngrediente on ordenIngrediente.id_ingrediente = ingrediente.id
+join ordenesCompra on ordenesCompra.id = ordenIngrediente.id_orden
+join proveedor on proveedor.id = ordenesCompra.id_proveedor
+where producto.id_ingrediente_principal = ingrediente.id
+;
+
 -- Listar los productos vendidos y el total de ingresos generados por cada uno.
+
+select producto.nombre, sum(productosVenta.subtotal)
+from producto
+join productosVenta on productosVenta.id_producto = producto.id
+GROUP BY producto.id
+;
+
 -- Obtener las ventas con la información de los clientes que las realizaron.
+
+select venta.*, cliente.nombre 
+from cliente
+join venta on venta.id_cliente = cliente.id;
+
 -- Mostrar las órdenes de compra que incluyen productos que están agotados.
+
+select ordenProducto.* from ordenesCompra
+join ordenProducto on ordenProducto.id_orden = ordenesCompra.id
+join producto on producto.id = ordenProducto.id_producto
+where producto.stock=0
+;
+
+-- 3 Consultas con Funciones de Agregación
+-- Calcular el total de ventas de la panadería.
+
+select sum(venta.total) as totalEnVentas from venta;
+
+-- Obtener el precio promedio de los productos vendidos.
+
+select avg(producto.precio) as precioPromedio from producto;
+
+-- Mostrar la cantidad total de productos vendidos por categoría.
+
+select categoria.nombre, count(producto.id) from producto
+join categoria on categoria.id = producto.id_categoria
+GROUP BY categoria.id;
+
+-- Calcular el ingreso total generado en una semana específica.
+
+SELECT 
+    SUM(total) AS ingreso_total
+FROM 
+    venta
+WHERE 
+    fecha >= '2024-10-01' AND fecha < '2024-10-08'; -- Ajusta las fechas según la semana deseada
+
+-- Mostrar el total de ventas realizadas por un empleado específico.
+-- Calcular la cantidad total de ingredientes utilizados en un producto.
+-- Obtener el total de órdenes de compra realizadas en el último mes.
+-- Mostrar la cantidad de clientes que han realizado compras en el último mes.
+-- Calcular el costo total de los ingredientes comprados a un proveedor.
+-- Mostrar el total de ventas en un día específico.
