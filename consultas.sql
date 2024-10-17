@@ -133,16 +133,28 @@ GROUP BY categoria.id;
 
 -- Calcular el ingreso total generado en una semana específica.
 
-SELECT 
-    SUM(total) AS ingreso_total
-FROM 
-    venta
-WHERE 
-    fecha >= '2024-10-01' AND fecha < '2024-10-08'; -- Ajusta las fechas según la semana deseada
+SELECT SUM(total) AS ingreso_total
+FROM venta
+WHERE fecha >= '2024-10-13' AND fecha < '2024-10-19';
 
 -- Mostrar el total de ventas realizadas por un empleado específico.
+
+SELECT SUM(total) AS ingreso_total
+FROM venta
+join empleado on empleado.id = venta.id_empleado
+WHERE empleado.id =1;
+
 -- Calcular la cantidad total de ingredientes utilizados en un producto.
+SELECT producto.nombre , count(ingrediente.id) as cantidadIngredientes from producto
+join productoIngrediente on productoIngrediente.id_producto = producto.id
+join ingrediente on ingrediente.id = productoIngrediente.id
+GROUP BY producto.id;
 -- Obtener el total de órdenes de compra realizadas en el último mes.
+select count(ordenesCompra.id) from ordenesCompra
+where month(ordenesCompra.fecha) = month(curdate());
 -- Mostrar la cantidad de clientes que han realizado compras en el último mes.
+select count(cliente.id) from cliente
+join venta on venta.id_cliente = cliente.id
+where month(venta.fecha) = month(curdate());
 -- Calcular el costo total de los ingredientes comprados a un proveedor.
 -- Mostrar el total de ventas en un día específico.
